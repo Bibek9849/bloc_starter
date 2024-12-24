@@ -1,59 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/arthmatic_cubit.dart';
 
 class ArithmeticCubitView extends StatelessWidget {
-  const ArithmeticCubitView({super.key});
+  ArithmeticCubitView({super.key});
+
+  final TextEditingController firstNumberController = TextEditingController();
+  final TextEditingController secondNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(title: const Text('Arithmetic Cubit View'), centerTitle: true),
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'First Number',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+      appBar: AppBar(
+        title: Text('Arithmetic Cubit'),
+      ),
+      body: Column(
+        children: [
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Enter first number',
+            ),
+            controller: firstNumberController,
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Enter second number',
+            ),
+            controller: secondNumberController,
+          ),
+          SizedBox(height: 20),
+          BlocBuilder<ArithmeticCubit, int>(builder: (context, int state) {
+            return Text(
+              '$state',
+              style: const TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Second Number',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            const Text("Result:"),
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-                width: double.infinity,
-                child:
-                    ElevatedButton(onPressed: () {}, child: const Text("Add"))),
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {}, child: const Text("Subtract"))),
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {}, child: const Text("Multiply"))),
-          ],
-        ),
-      )),
+            );
+          }),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              final int firstNumber = int.parse(firstNumberController.text);
+              final int secondNumber = int.parse(secondNumberController.text);
+              context.read<ArithmeticCubit>().add(firstNumber, secondNumber);
+            },
+            child: Text('Add'),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              final int firstNumber = int.parse(firstNumberController.text);
+              final int secondNumber = int.parse(secondNumberController.text);
+              context
+                  .read<ArithmeticCubit>()
+                  .subtract(firstNumber, secondNumber);
+            },
+            child: Text('Subtract'),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              final int firstNumber = int.parse(firstNumberController.text);
+              final int secondNumber = int.parse(secondNumberController.text);
+              context
+                  .read<ArithmeticCubit>()
+                  .multiply(firstNumber, secondNumber);
+            },
+            child: Text('Multiply'),
+          ),
+        ],
+      ),
     );
   }
 }
